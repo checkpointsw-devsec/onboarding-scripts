@@ -7,6 +7,8 @@
 #
 # Copywrite 2019, Check Point Software
 # www.checkpoint.com
+# Modified 04/02/2021 - This version is specifically for connecting to CSPM
+# tenants in the EU region.
 # *******************************************************************************
 
 import json
@@ -30,7 +32,7 @@ print(f'\n:: Dome9 AWS Onboarding with CFT Deployment Automation :: \nExecution 
 
 def add_aws_account_to_d9(name, arn, extid, readonly):
 
-    url = "https://api.dome9.com/v2/CloudAccounts"
+    url = "https://api.eu1.dome9.com/v2/CloudAccounts"
     payload = {"name": name, "credentials": {"arn": arn, "secret": extid, "type": "RoleBased", "isReadOnly": readonly}, "fullProtection": "false"}
 
     print('\nAdding target AWS account to Dome9...')
@@ -50,7 +52,7 @@ def add_aws_account_to_d9(name, arn, extid, readonly):
 
 def get_aws_accounts_from_d9():
 
-    url = "https://api.dome9.com/v2/CloudAccounts"
+    url = "https://api.eu1.dome9.com/v2/CloudAccounts"
     payload = {}
 
     print('\nGetting list of AWS accounts already onboarded to Dome9...')
@@ -67,7 +69,7 @@ def get_aws_accounts_from_d9():
 
 def create_ou_in_d9(name, parent_id):
 
-    url = "https://api.dome9.com/v2/organizationalunit"
+    url = "https://api.eu1.dome9.com/v2/organizationalunit"
     payload = {"name":name,"parentId":parent_id}
 
     resp = http_request('post', url, payload, False)
@@ -86,7 +88,7 @@ def attach_account_to_ou_in_d9(cloud_account_id, ou_id):
     if OPTIONS.ignore_ou: # Ignore OU processing flag detected
         return True
 
-    url = "https://api.dome9.com/v2/cloudaccounts/organizationalunit/attach"
+    url = "https://api.eu1.dome9.com/v2/cloudaccounts/organizationalunit/attach"
     payload = {"entries":[cloud_account_id],"organizationalUnitId":ou_id}
 
     print('\nAttaching Cloud Account to OU...')
@@ -181,7 +183,7 @@ def process_organizatonal_units(aws_ou_list):
         return True
 
     # Get root OU list from Dome9
-    url = "https://api.dome9.com/v2/organizationalunit"
+    url = "https://api.eu1.dome9.com/v2/organizationalunit"
     payload = {}
  
     resp = http_request('get', url, payload, True)
